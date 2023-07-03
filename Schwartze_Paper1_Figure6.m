@@ -2,11 +2,11 @@
 % Load data
 
 clear variables
-% monkey = 'P';
-% date_strings = {'20170630', '20170712', '20170703', '20170713', '20170720', '20170731', '20170705', '20170706', '20170714', '20170717', '20170801', '20170802'};
+monkey = 'P';
+date_strings = {'20170630', '20170712', '20170703', '20170713', '20170720', '20170731', '20170705', '20170706', '20170714', '20170717', '20170801', '20170802'};
 
-monkey = 'Q';
-date_strings = {'20180425', '20180426', '20180509', '20180510', '20180529', '20180530', '20180418', '20180419', '20180503', '20180507', '20180619', '20180620'};
+% monkey = 'Q';
+% date_strings = {'20180425', '20180426', '20180509', '20180510', '20180529', '20180530', '20180418', '20180419', '20180503', '20180507', '20180619', '20180620'};
 % Regression and data organization
 % run_analysis = true;
 run_analysis = false;
@@ -285,79 +285,13 @@ labels_R2_partial = labels_R2_partial(:);
 mean_R2_partial_init = mean(All_best_R2_partial_init(:,All_signif_units),2);
 mean_R2_partial_cor  = mean(All_best_R2_partial_cor(:,All_signif_units),2);
 %
-%Plot partial R^2 for initial movements
-figure
-vh = violinplot(plot_R2_partial_init, labels_R2_partial, 'GroupOrder', {'Total', 'Velocity', 'Position', 'Speed'});
-vh(1).ViolinColor = tot_color;
-vh(2).ViolinColor = vel_color;
-vh(3).ViolinColor = pos_color;
-vh(4).ViolinColor = speed_color;
-ylabel('R^2')
-set(gca, 'FontSize', 14)
-ylim([0, 0.8])
-title(['Monkey ' monkey])
-ax = axes('Position', [.6,.4,.4,.4]);
-ph = pie(mean_R2_partial_init([2,1,3]), {'Velocity', 'Position', 'Speed'});
-colormap([vel_color; pos_color; speed_color])
-ph(4).Position(2) = ph(4).Position(2)+0.05;
-ph(6).Position(2) = ph(6).Position(2)-0.05;
-% print(gcf, ['./Figures/' monkey '_PartialR2_init'], '-dpng')
-%
-% %Plot partial R^2 for corrective movements
-figure
-vh = violinplot(plot_R2_partial_cor, labels_R2_partial, 'GroupOrder', {'Total', 'Velocity', 'Position', 'Speed'});
-vh(1).ViolinColor = tot_color;
-vh(2).ViolinColor = vel_color;
-vh(3).ViolinColor = pos_color;
-vh(4).ViolinColor = speed_color;
-ylabel('R^2')
-title(['Monkey ' monkey])
-set(gca, 'FontSize', 14)
-ylim([0, 0.8])
-ax = axes('Position', [.6,.4,.4,.4]);
-ph = pie(mean_R2_partial_cor([2,1,3]), {'Velocity', 'Position', 'Speed'});
-colormap([vel_color; pos_color; speed_color])
-% print(gcf, ['./Figures/' monkey '_PartialR2_cor'], '-dpng')
+% 
 
 
-figure
-scatter(vel_Modulation_init(All_signif_units), vel_Modulation_cor(All_signif_units), 'MarkerEdgeColor', 'k')
-hold on
-line([0 15], [0 15], 'LineStyle', '--', 'Color', 'k')
-xlim([-0.1,15])
-ylim([-0.1,15])
-axis square
-xlabel('Initial Velocity Depth of Mod.', 'Color', init_color)
-ylabel('Corrective Velocity Depth of Mod.', 'Color', cor_color)
-set(gca, 'FontSize', 14)
-title(['Monkey ' monkey])
-% print(gcf, ['./Figures/' monkey '_Vel_DOM'], '-dpng')
-%
-%
-figure
-scatter(data_Modulation_init(All_signif_units), data_Modulation_cor(All_signif_units), 'MarkerEdgeColor', 'k')
-hold on
-line([0 15], [0 15], 'LineStyle', '--', 'Color', 'k')
-xlim([-0.1,15])
-ylim([-0.1,15])
-axis square
-xlabel('Initial Direction Depth of Mod.', 'Color', init_color)
-ylabel('Corrective Direction Depth of Mod.', 'Color', cor_color)
-set(gca, 'FontSize', 14)
-title(['Monkey ' monkey])
-% print(gcf, ['./Figures/' monkey '_Dir_DOM'], '-dpng')
 %
 %
 PrefDirDiff=abs(wrapTo180(All_pref_dir_init-All_pref_dir_cor));
 
-figure
-histogram(PrefDirDiff(All_signif_units), 0:15:180, 'FaceColor', [0.2,0.2,0.2])
-set(gca, 'XTick', 0:30:180)
-xlabel('Preferred Direction Difference (degrees)')
-ylabel('Number of units')
-set(gca, 'FontSize', 14)
-title(['Monkey ' monkey])
-% print(gcf, ['./Figures/' monkey '_PrefDir_init-cor'], '-dpng')
 
 
 perc_neurons_lt_30deg = 100*(sum(PrefDirDiff(All_signif_units)<30)/sum(All_signif_units));
@@ -366,19 +300,6 @@ disp([num2str(perc_neurons_lt_30deg) '% Pref Dir < 30 degrees'])
 
 
 
-figure
-scatter(All_best_RMSE_init(All_signif_units), All_best_RMSE_cor(All_signif_units), 'MarkerEdgeColor', 'k')
-axis square
-line([0,25],[0,25], 'LineStyle', '--', 'Color', 'k')
-xlim([0,25])
-ylim([0,25])
-xlabel('Initial Model RMSE', 'Color', init_color)
-ylabel('Corrective Model RMSE', 'Color', cor_color)
-set(gca, 'FontSize', 14)
-% print(gcf, ['./Figures/' monkey '_RMSE_init-cor'], '-dpng')
-
-%paired t-test
-[h,p,ci,stats] = ttest(All_best_RMSE_init(All_signif_units), All_best_RMSE_cor(All_signif_units));
 
 
 
@@ -399,18 +320,7 @@ fit_vectors_cor = [ones(1,8); zeros(2,8);  mean_cor_speed*cosd(0:45:315);  mean_
 fit_FR_init = pagemtimes(fit_vectors_init, All_Coefficients_init );
 fit_FR_cor = pagemtimes(fit_vectors_cor, All_Coefficients_cor );
 
-figure; 
-plot(sum(std(fit_FR_init(:,:,All_signif_units),[],1),3))
-hold on
-plot(sum(std(fit_FR_cor(:,:,All_signif_units),[],1),3))
 
-figure; 
-plot(sum(sqrt(sum(All_Coefficients_init(4:5,:,All_signif_units).^2,1)),3))
-hold on
-plot(sum(sqrt(sum(All_Coefficients_cor(4:5,:,All_signif_units).^2,1)),3))
-
-% fit_init_pca_coeff = pca(reshape(fit_FR_init(:,:,All_signif_units), [], sum(All_signif_units)));
-% fit_cor_pca_coeff = pca(reshape(fit_FR_cor(:,:,All_signif_units), [], sum(All_signif_units)));
 
 t_pt_for_pca = 16;  %150 ms before movement
 fit_init_pca_coeff = pca(reshape(fit_FR_init(:,t_pt_for_pca ,All_signif_units), [], sum(All_signif_units)), 'Centered', true);
@@ -452,15 +362,7 @@ disp(['Percentage Cor in Cor space: ' num2str(percent_cor_cor)])
 
 
 
-sum(sum((score_init_init - mean(mean(score_init_init,2),1)).^2,1),2)
 
-figure; plot(squeeze(sum(sum((score_init_init - mean(mean(score_init_init,2),1)).^2,1),2)))
-hold on
-plot(squeeze(sum(sum((score_cor_init - mean(mean(score_cor_init,2),1)).^2,1),2)))
-
-figure; plot(squeeze(sum(sum((score_init_cor - mean(mean(score_init_cor,2),1)).^2,1),2)))
-hold on
-plot(squeeze(sum(sum((score_cor_cor - mean(mean(score_cor_cor,2),1)).^2,1),2)))
 
 
 %Trajectory is 300ms until 100ms after peak speed
@@ -518,7 +420,7 @@ hold on
 scatter(score_init_cor(:,16,1), score_init_cor(:,16,2), 'MarkerEdgeColor', init_color, 'MarkerFaceColor', init_color)
 ha{1}(2,1).XLim = ha{1}(2,2).XLim; 
 ha{1}(2,1).YLim = ha{1}(2,2).YLim; 
-text(160,-50,[num2str(percent_cor_init,3) '%'],'Color', init_color, 'FontSize',18)
+text(160,-50,[num2str(percent_init_cor,3) '%'],'Color', init_color, 'FontSize',18)
 axis off
 annotation('rectangle', ha{1}(2,1).Position, 'LineWidth', 2.5, 'Color', cor_color)
 
