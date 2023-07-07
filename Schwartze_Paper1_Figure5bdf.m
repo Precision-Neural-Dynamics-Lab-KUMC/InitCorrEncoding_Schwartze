@@ -20,6 +20,8 @@ All_day_index = cat(1,All_day_index{:});
 All_avg_speed_init = avg_speed_init(All_day_index);
 All_avg_speed_cor  = avg_speed_cor(All_day_index);
 
+disp(['Percent magnitude corr to init: '  num2str(100*mean(All_avg_speed_cor)./mean(All_avg_speed_init)) '%'])
+
 All_signif_units = squeeze(cat(3,signif_units{:}));
 All_Coefficients_init = cat(2,best_Coefficients_init{:});
 All_Coefficients_cor = cat(2,best_Coefficients_cor{:});
