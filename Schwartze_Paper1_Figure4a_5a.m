@@ -223,8 +223,8 @@ All_best_RMSE_init = cat(2,best_RMSE_init{:});
 All_best_RMSE_cor = cat(2,best_RMSE_cor{:});
 
 %Velocity regression coefficients depth of modulation
-vel_Modulation_init = sqrt(sum(All_Coefficients_init(3:4,:).^2,1));
-vel_Modulation_cor  = sqrt(sum(All_Coefficients_cor(3:4,:).^2,1));
+vel_Modulation_init = 2*sqrt(sum(All_Coefficients_init(4:5,:).^2,1));
+vel_Modulation_cor  = 2*sqrt(sum(All_Coefficients_cor(4:5,:).^2,1));
     
 %Data regression coefficients depth of modulation
 data_Modulation_init = All_avg_speed_init.*vel_Modulation_init;
