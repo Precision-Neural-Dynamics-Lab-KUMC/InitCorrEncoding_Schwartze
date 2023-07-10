@@ -10,14 +10,18 @@ function [R2_partial, R2_tot, Coefficients, p_vals, RMSE] = Do_mutiregress(X,fir
 % speed = X(:,5);
 %[b,bint,r,rint,stats]=regress(curr_Y(:,1),X);
 %[b,~,E,~,~] = mvregress(X,curr_Y);
+%(1) intercept (2:3) start_pos (4:5) vel (6) speed]
 model=fitlm(X,firingrate);
 RRT=1-model.SSR/model.SST;
 %ref:https://online.stat.psu.edu/stat462/node/138/
-model1=fitlm(X(:,3:5),firingrate);
 %R2_patial1=SSR(x1,x2,x3)−SSR(x1)/SSE(x1)
+%Fit model without Position
+model1=fitlm(X(:,3:5),firingrate);
 R2_pos = (model.SSR-model1.SSR)/model1.SSE;
+%Fit model without Velocity
 model2=fitlm([X(:,1:2) X(:,5)],firingrate);
 R2_vel = (model.SSR-model2.SSR)/model2.SSE;
+%Fit model without Speed
 model3=fitlm(X(:,1:4),firingrate);
 R2_speed = (model.SSR-model3.SSR)/model3.SSE;
 

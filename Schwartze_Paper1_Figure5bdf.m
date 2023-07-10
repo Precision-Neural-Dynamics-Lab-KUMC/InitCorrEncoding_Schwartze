@@ -20,20 +20,20 @@ All_day_index = cat(1,All_day_index{:});
 All_avg_speed_init = avg_speed_init(All_day_index);
 All_avg_speed_cor  = avg_speed_cor(All_day_index);
 
-disp(['Percent magnitude corr to init: '  num2str(100*mean(All_avg_speed_cor)./mean(All_avg_speed_init)) '%'])
-
 All_signif_units = squeeze(cat(3,signif_units{:}));
 All_Coefficients_init = cat(2,best_Coefficients_init{:});
 All_Coefficients_cor = cat(2,best_Coefficients_cor{:});
 
 
 %Velocity regression coefficients depth of modulation
-vel_Modulation_init = sqrt(sum(All_Coefficients_init(3:4,:).^2,1));
-vel_Modulation_cor  = sqrt(sum(All_Coefficients_cor(3:4,:).^2,1));
+% vel_Modulation_init = sqrt(sum(All_Coefficients_init(3:4,:).^2,1));
+% vel_Modulation_cor  = sqrt(sum(All_Coefficients_cor(3:4,:).^2,1));
+vel_Modulation_init = 2*sqrt(sum(All_Coefficients_init(4:5,:).^2,1));
+vel_Modulation_cor  = 2*sqrt(sum(All_Coefficients_cor(4:5,:).^2,1));
     
 %Data regression coefficients depth of modulation
-data_Modulation_init = All_avg_speed_init.*vel_Modulation_init;
-data_Modulation_cor  = All_avg_speed_cor.*vel_Modulation_cor;
+data_Modulation_init = 2*All_avg_speed_init.*vel_Modulation_init;
+data_Modulation_cor  = 2*All_avg_speed_cor.*vel_Modulation_cor;
 
 %%
 % Graphs
@@ -46,16 +46,18 @@ cor_color = [0.7,0,0];
 [vel_mod_correlation_matrix,vmP,vmRL,vmRU] = corrcoef(vel_Modulation_init(All_signif_units), vel_Modulation_cor(All_signif_units));
 vel_mod_correlation = vel_mod_correlation_matrix(1, 2);
 disp(['Correlation init vs. corr speed modifed: ' num2str(vel_mod_correlation), ' 95% CI: ' num2str(vmRL(1,2)) '-' num2str(vmRU(1,2))])
-%% Correlation init vs. corr speed modifed: 0.50947 95% CI: 0.45404-0.56098
+%% Correlation init vs. corr speed modifed: 0.47165 95% CI: 0.4136-0.52588
 
 figure
 scatter(vel_Modulation_init(All_signif_units), vel_Modulation_cor(All_signif_units), 'MarkerEdgeColor', 'k')
 hold on
-line([0 7.5], [0 15], 'LineStyle', '--', 'Color', 'k')
-line([0 15], [0 15], 'LineStyle', '--', 'Color', 'k')
-line([0 15], [0 7.5], 'LineStyle', '--', 'Color', 'k')
-xlim([-0.1,15])
-ylim([-0.1,15])
+line([0 45], [0 90], 'LineStyle', '--', 'Color', 'k')
+line([0 90], [0 90], 'LineStyle', '--', 'Color', 'k')
+line([0 90], [0 45], 'LineStyle', '--', 'Color', 'k')
+% xlim([-0.1,15])
+% ylim([-0.1,15])
+xlim([-0.1,90])
+ylim([-0.1,90])
 text(13.2,7.9,'0.5x', 'FontSize', 12)
 text(14.1,13.8,'1x', 'FontSize', 12)
 text(7.5,14.6,'2x', 'FontSize', 12)
@@ -82,12 +84,14 @@ title(['Monkey ' monkey])
 figure
 scatter(data_Modulation_init(All_signif_units), data_Modulation_cor(All_signif_units), 'MarkerEdgeColor', 'k')
 hold on
-line([0 15], [0 15], 'LineStyle', '--', 'Color', 'k')
-xlim([-0.1,15])
-ylim([-0.1,15])
+line([0 90], [0 90], 'LineStyle', '--', 'Color', 'k')
+% xlim([-0.1,15])
+% ylim([-0.1,15])
+xlim([-0.1,90])
+ylim([-0.1,90])
 axis square
-xlabel('Initial Direction Depth of Mod.', 'Color', init_color)
-ylabel('Corrective Direction Depth of Mod.', 'Color', cor_color)
+xlabel('Initial Task Depth of Mod.', 'Color', init_color)
+ylabel('Corrective Task Depth of Mod.', 'Color', cor_color)
 set(gca, 'FontSize', 14)
 set(gcf,'Position',[0 0 600 400]);
 title(['Monkey ' monkey])

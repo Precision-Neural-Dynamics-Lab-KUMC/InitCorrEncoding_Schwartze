@@ -2,14 +2,14 @@
 % Load data
 
 clear variables
-monkey = 'P';
-date_strings = {'20170630', '20170712', '20170703', '20170713', '20170720', '20170731', '20170705', '20170706', '20170714', '20170717', '20170801', '20170802'}; 
+% monkey = 'P';
+% date_strings = {'20170630', '20170712', '20170703', '20170713', '20170720', '20170731', '20170705', '20170706', '20170714', '20170717', '20170801', '20170802'}; 
 
-% monkey = 'Q';
-% date_strings = {'20180425', '20180426', '20180509', '20180510', '20180529', '20180530', '20180418', '20180419', '20180503', '20180507', '20180619', '20180620'};
+monkey = 'Q';
+date_strings = {'20180425', '20180426', '20180509', '20180510', '20180529', '20180530', '20180418', '20180419', '20180503', '20180507', '20180619', '20180620'};
 % Regression and data organization
-% run_analysis = true;
-run_analysis = false;
+run_analysis = true;
+% run_analysis = false;
 
 addpath('./Violinplot-Matlab-master')
 
@@ -51,8 +51,8 @@ end
 %% 
 
     load([data_location monkey '_Spikes_' date_strings{d}  '-data.mat'])  %
-    
-    
+   
+
 
 %Use these to pull out the area for a given spiking unit in
 %SpikeFiringRates or SpikeTimes
@@ -177,13 +177,15 @@ best_R2_partial_init{d}(:,n) = squeeze(R2_partial_init(:,best_init_t{d}(n),n));
 best_R2_partial_cor{d}(:,n)  = squeeze(R2_partial_cor(:,best_cor_t{d}(n),n));
 best_RMSE_init{d}(n) = RMSE_init{d}(best_init_t{d}(n),n);
 best_RMSE_cor{d}(n) = RMSE_cor{d}(best_cor_t{d}(n),n);
+best_p_vals_init{d}(:,n) = p_vals_init(:,best_init_t{d}(n),n);
+best_p_vals_cor{d}(:,n) = p_vals_init(:,best_cor_t{d}(n),n);
 end
 
 clearvars -except monkey date_strings d avg_speed_init avg_speed_cor best_R2_tot_init best_init_t best_R2_tot_cor best_cor_t signif_units best_Coefficients_init best_Coefficients_cor ...
-    best_std_FR_init best_std_FR_cor pref_dir_init pref_dir_cor best_R2_partial_init best_R2_partial_cor RMSE RMSE_init RMSE_cor best_RMSE_init best_RMSE_cor
+    best_std_FR_init best_std_FR_cor pref_dir_init pref_dir_cor best_R2_partial_init best_R2_partial_cor RMSE RMSE_init RMSE_cor best_RMSE_init best_RMSE_cor best_p_vals_init best_p_vals_cor
 
 d
-end
+ end
    save(['R:\SOM RSCH\RouseLab\DataFiles\Project_Data\20160504_COT_precision\data_analyses\COT_Direction_Regress\' monkey '_regress_results'])
 else
     load(['R:\SOM RSCH\RouseLab\DataFiles\Project_Data\20160504_COT_precision\data_analyses\COT_Direction_Regress\' monkey '_regress_results'])
@@ -210,6 +212,8 @@ All_best_R2_partial_init = cat(2,best_R2_partial_init{:});
 All_best_R2_partial_cor  = cat(2,best_R2_partial_cor{:});
 All_best_RMSE_init = cat(2,best_RMSE_init{:});
 All_best_RMSE_cor = cat(2,best_RMSE_cor{:});
+All_best_p_vals_init = cat(2,best_p_vals_init{:});
+All_best_p_vals_cor = cat(2,best_p_vals_cor{:});
 
 %Velocity regression coefficients depth of modulation
 vel_Modulation_init = sqrt(sum(All_Coefficients_init(3:4,:).^2,1));
