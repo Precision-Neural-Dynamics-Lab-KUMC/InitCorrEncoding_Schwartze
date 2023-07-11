@@ -313,6 +313,7 @@ mean_cor_speed = mean(All_avg_speed_cor);
 % fit_FR_init = pagemtimes(fit_vectors_init, All_Coefficients_init([1,4:5],:,:) );
 % fit_FR_cor = pagemtimes(fit_vectors_cor, All_Coefficients_cor([1,4:5],:,:) );
 
+%1-Intercept, 2:3-Position, 4:5-Velocity, 6-Speed
 fit_vectors_init = [ones(1,8); zeros(2,8); mean_init_speed*cosd(0:45:315); mean_init_speed*sind(0:45:315); mean_init_speed*ones(1,8)]';
 fit_vectors_cor = [ones(1,8); zeros(2,8);  mean_cor_speed*cosd(0:45:315);  mean_cor_speed*sind(0:45:315); mean_cor_speed*ones(1,8)]';
 
