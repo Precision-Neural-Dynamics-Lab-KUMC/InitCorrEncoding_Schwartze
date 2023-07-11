@@ -7,9 +7,6 @@ monkey = 'P';
 date_strings = {'20170630', '20170712', '20170703', '20170713', '20170720', '20170731', '20170705', '20170706', '20170714', '20170717', '20170801', '20170802'}; 
 
 
-addpath('./Violinplot-Matlab-master')
-
-
 load(['\\kumc.edu\data\Research\SOM RSCH\RouseLab\DataFiles\Project_Data\20160504_COT_precision\data_analyses\COT_Direction_Regress\' monkey '_regress_results'])
 
 
@@ -27,12 +24,10 @@ cor_color = [0.7,0,0];
 
 [correlation_matrix,~,correlation_matrix_lower, correlation_matrix_upper] = corrcoef(All_best_RMSE_init(All_signif_units), All_best_RMSE_cor(All_signif_units));
 correlation = correlation_matrix(1, 2);
-<<<<<<< Updated upstream
 disp(['Corr: ' num2str(correlation) ', (' num2str(correlation_matrix_lower(1,2)) '-' num2str(correlation_matrix_upper(1,2)) ') 95%CI'])
-=======
 disp(['Correlation init vs. corr RMSE: ' num2str(correlation)]);
 %Correlation init vs. corr RMSE: 0.85405
->>>>>>> Stashed changes
+
 
 
 figure
@@ -45,11 +40,11 @@ xlabel('Initial Model RMSE', 'Color', init_color)
 ylabel('Corrective Model RMSE', 'Color', cor_color)
 set(gca, 'FontSize', 14)
 set(gcf,'Position',[0 0 600 400]);
-<<<<<<< Updated upstream
+
 hold on;
-=======
+
 % hold on;
->>>>>>> Stashed changes
+
 % fit = polyfit(All_best_RMSE_init(All_signif_units), All_best_RMSE_cor(All_signif_units), 1);
 % y_fit = polyval(fit, All_best_RMSE_init(All_signif_units));
 % plot(All_best_RMSE_init(All_signif_units), y_fit, 'color','cyan');

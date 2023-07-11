@@ -12,8 +12,6 @@ date_strings = {'20180425', '20180426', '20180509', '20180510', '20180529', '201
 % run_analysis = true;
 run_analysis = false;
 
-addpath('./Violinplot-Matlab-master')
-
 if run_analysis
 
 for d = 1:length(date_strings)
@@ -355,8 +353,8 @@ set(gca, 'FontSize', 14)
 set(gcf,'Position',[0 0 900 600]);
 title(['Monkey ' monkey])
 figName = 'Figure4C';
-print(figName, '-dtiff')
-print(figName, '-dpdf', '-painters' )
+% print(figName, '-dtiff')
+% print(figName, '-dpdf', '-painters' )
 
 
 perc_neurons_lt_45deg = 100*(sum(PrefDirDiff(All_signif_units)<45)/sum(All_signif_units));

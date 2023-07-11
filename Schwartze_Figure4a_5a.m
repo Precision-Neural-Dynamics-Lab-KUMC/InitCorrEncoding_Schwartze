@@ -10,8 +10,7 @@ date_strings = {'20170630', '20170712', '20170703', '20170713', '20170720', '201
 % run_analysis = true;
  run_analysis = false;
 
-%https://github.com/bastibe/Violinplot-Matlab
-addpath('Violinplot-Matlab-master')
+
 
 if run_analysis
 
