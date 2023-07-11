@@ -6,9 +6,8 @@ clear variables
 monkey = 'Q';
 date_strings = {'20180425', '20180426', '20180509', '20180510', '20180529', '20180530', '20180418', '20180419', '20180503', '20180507', '20180619', '20180620'};
 
-% addpath('./Violinplot-Matlab-master')
-% %https://github.com/bastibe/Violinplot-Matlab
-% addpath('Violinplot-Matlab-master')
+%Violinplot package needed - DOI: 10.5281/zenodo.4559847
+addpath('./Violinplot-Matlab-master')
 
 load(['\\kumc.edu\data\Research\SOM RSCH\RouseLab\DataFiles\Project_Data\20160504_COT_precision\data_analyses\COT_Direction_Regress\' monkey '_regress_results'])
     

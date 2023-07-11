@@ -8,7 +8,8 @@ date_strings = {'20170630', '20170712', '20170703', '20170713', '20170720', '201
 
 
 
-% addpath('./Violinplot-Matlab-master')
+%Violinplot package needed - DOI: 10.5281/zenodo.4559847
+ addpath('./Violinplot-Matlab-master')
 
 
 load(['\\kumc.edu\data\Research\SOM RSCH\RouseLab\DataFiles\Project_Data\20160504_COT_precision\data_analyses\COT_Direction_Regress\' monkey '_regress_results'])
@@ -115,7 +116,7 @@ set(gcf,'Position',[0 0 600 400]);
 % %Plot partial R^2 for corrective movements
 figure
 vh = violinplot(plot_R2_partial_cor, labels_R2_partial, 'GroupOrder', {'Total', 'Velocity', 'Position', 'Speed'});
-vh = violinplot(plot_R2_partial_cor); %, labels_R2_partial, 'GroupOrder', {'Total', 'Velocity', 'Position', 'Speed'});
+% vh = violinplot(plot_R2_partial_cor); %, labels_R2_partial, 'GroupOrder', {'Total', 'Velocity', 'Position', 'Speed'});
 vh(1).ViolinColor = {tot_color};
 vh(2).ViolinColor = {vel_color};
 vh(3).ViolinColor = {pos_color};
