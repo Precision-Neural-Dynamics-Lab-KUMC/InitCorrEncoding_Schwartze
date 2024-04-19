@@ -5,7 +5,7 @@ clear variables
 
 monkey = 'Q';
 date_strings = {'20180425', '20180426', '20180509', '20180510', '20180529', '20180530', '20180418', '20180419', '20180503', '20180507', '20180619', '20180620'};
-% Regression and data organization
+% % Regression and data organization
 run_analysis = true;
 % run_analysis = false;
 
@@ -228,6 +228,130 @@ for targ = 1:8 %:8
 
     set(gcf,'CurrentAxes', ha{2}(1,1))
     hold on
+    plot(CursorSpeed_Trial_peakVel(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag,:,1)', 'Color',  [0.2 0.2 0.2])
+
+    curr_peaks = find(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag);
+    for p = 1:length(curr_peaks)
+        curr_t =All_speedPeaksTroughs_i(curr_peaks(p),2) - All_speedPeaksTroughs_i( All_trial_ids_peakVel==All_trial_ids_peakVel(curr_peaks(p))&All_initPeak_flag,2 ) + sample_before +1 ;
+        scatter(curr_t, CursorSpeed_peakVel(curr_peaks(p), peak_sample_before+1), 's', 'MarkerEdgeColor', init_color, 'MarkerFaceColor', init_color)
+    end
+
+    curr_peaks = find(ismember(All_trial_ids_peakVel,curr_trials)&~All_initPeak_flag);
+    for p = 1:length(curr_peaks)
+        curr_t =All_speedPeaksTroughs_i(curr_peaks(p),2) - All_speedPeaksTroughs_i( All_trial_ids_peakVel==All_trial_ids_peakVel(curr_peaks(p))&All_initPeak_flag,2 ) + sample_before + 1;
+        scatter(curr_t, CursorSpeed_peakVel(curr_peaks(p), peak_sample_before+1), 's', 'MarkerEdgeColor', cor_color, 'MarkerFaceColor', cor_color)
+    end
+end
+xlim([0, 320])
+line(get(gca,'XLim'), [1 1] *250, 'LineStyle', '--', 'Color', 'k')
+ylabel( 'Cursor speed, pixels/s')
+set(gca, 'XTick', 30+(0:100:200))
+set(gca, 'FontSize', 14)
+xlabel('Time, ms')
+
+x_ticks = get(gca, 'XTickLabel');
+x_ticks{1} = '0';
+x_ticks{2} = '1000';
+x_ticks{3} = '2000';
+% x_ticks{4} = '3000';
+set(gca, 'XTickLabel', x_ticks)
+
+annotation('textbox',[0.01 0.94 0.05 0.03], 'String', 'A', 'EdgeColor', 'none', 'FontSize', 22, 'HorizontalAlignment','center')
+annotation('textbox',[0.26 0.94 0.05 0.03], 'String', 'B', 'EdgeColor', 'none', 'FontSize', 22, 'HorizontalAlignment','center')
+annotation('textbox',[0.70 0.94 0.05 0.03], 'String', 'C', 'EdgeColor', 'none', 'FontSize', 22, 'HorizontalAlignment','center')
+
+set(gcf,'CurrentAxes', ha{3}(1,1))
+axis square
+axis equal
+axis off
+
+figName = [monkey '_Figure2ab'];
+% print(figName, '-dtiff')
+% print(figName, '-dpdf', '-vector' )
+
+%%Figure 2C is plotted separately so you can save as raster graphic as too
+%%many data points for vector
+
+figure('PaperPosition', [1,1,7.5, 3])
+wysiwyg
+ha = my_subplot([1,2,3],[1,1.25 1],[1,1,1],[0.25, .01, 0.25], [0.01,0.2,0.1], true);
+ha{2}(1,1).Position(2) = 0.2;
+ha{2}(1,1).Position(1) = 0.37;
+rng(45)
+set(gcf,'CurrentAxes', ha{1}(1,1))
+axis square
+axis equal
+axis off
+set(gcf,'CurrentAxes', ha{2}(1,1))
+axis off
+set(gcf,'CurrentAxes', ha{3}(1,1))
+submovementsToPlot = false(size(All_initPeak_flag));
+submovementsToPlot(1:10:12637) = true;
+submovementsToPlotCor = ~All_initPeak_flag & submovementsToPlot;
+plot(CursorPos_peakVel(submovementsToPlotCor,[1,end],1)',CursorPos_peakVel(submovementsToPlotCor,[1,end],2)','Color',cor_color)
+hold on
+scatter(CursorPos_peakVel(submovementsToPlotCor,1,1)',CursorPos_peakVel(submovementsToPlotCor,1,2)',5,'MarkerFaceColor',cor_color,'MarkerEdgeColor',[0,0,0])
+
+submovementsToPlotInit = All_initPeak_flag & submovementsToPlot;
+plot(CursorPos_peakVel(submovementsToPlotInit,[1,end],1)',CursorPos_peakVel(submovementsToPlotInit,[1,end],2)','Color',init_color)
+scatter(CursorPos_peakVel(submovementsToPlotInit,1,1)',CursorPos_peakVel(submovementsToPlotInit,1,2)',5,'MarkerFaceColor',init_color,'MarkerEdgeColor',[0,0,0])
+axis square
+axis equal
+axis off
+
+annotation('textbox',[0.01 0.94 0.05 0.03], 'String', 'A', 'EdgeColor', 'none', 'FontSize', 22, 'HorizontalAlignment','center')
+annotation('textbox',[0.26 0.94 0.05 0.03], 'String', 'B', 'EdgeColor', 'none', 'FontSize', 22, 'HorizontalAlignment','center')
+annotation('textbox',[0.70 0.94 0.05 0.03], 'String', 'C', 'EdgeColor', 'none', 'FontSize', 22, 'HorizontalAlignment','center')
+
+figName = [monkey '_Figure2c'];
+print(figName, '-dtiff')
+print(figName, '-dpdf', '-vector' )
+
+
+figure('PaperPosition', [1,1,7.5, 3])
+wysiwyg
+ha = my_subplot([1,2,3],[1,1.25 1],[1,1,1],[0.25, .01, 0.25], [0.01,0.2,0.1], true);
+ha{2}(1,1).Position(2) = 0.2;
+ha{2}(1,1).Position(1) = 0.37;
+rng(45)
+
+for targ = 1:8 %:8
+    set(gcf,'CurrentAxes', ha{1}(1,1))
+    hold on
+    curr_trials = find(AllTrialTargets==(targ+16));
+    tmp_flag = false;
+    while ~tmp_flag
+        curr_trials = curr_trials(randi(length(curr_trials),6,1));
+        if  max(max(CursorSpeed_Trial_peakVel(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag,50:end))) < max(max(CursorSpeed_Trial_peakVel(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag,1:50)))
+            if all(all(isnan(CursorSpeed_Trial_peakVel(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag,400:end))))
+                tmp_flag =true;
+            end
+        end
+    end
+
+    plot(CursorPos_Trial_peakVel(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag,:,1)', CursorPos_Trial_peakVel(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag,:,2)', 'Color', [0.7 0.7 0.7])
+
+    curr_peaks = find(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag);
+    plot(CursorPos_peakVel(curr_peaks, :,1)', CursorPos_peakVel(curr_peaks, :,2)', 'Color', init_color)
+    scatter(CursorPos_peakVel(curr_peaks, peak_sample_before+1, 1), CursorPos_peakVel(curr_peaks, peak_sample_before+1, 2), 20, 's', 'MarkerFaceColor', 1-0.6*(1-init_color), 'MarkerEdgeColor', 1-0.6*(1-init_color))
+
+    curr_peaks = find(ismember(All_trial_ids_peakVel,curr_trials)&~All_initPeak_flag);
+    plot(CursorPos_peakVel(curr_peaks, :,1)', CursorPos_peakVel(curr_peaks, :,2)', 'Color', cor_color)
+    scatter(CursorPos_peakVel(curr_peaks, peak_sample_before+1, 1), CursorPos_peakVel(curr_peaks, peak_sample_before+1, 2), 20, 's', 'MarkerFaceColor', 1-0.6*(1-cor_color), 'MarkerEdgeColor', 1-0.6*(1-cor_color))
+
+
+    draw_target(double(TrialSettings.target_angle(unique_trial_target(targ+16))), 2*pi/8, double(TrialSettings.inner_target_radii(unique_trial_target(targ+16))), double(TrialSettings.outer_target_radii(unique_trial_target(targ+16))))
+
+    if targ ==8
+        plot(center_target_x, center_target_y, 'Color', 'k')
+        axis square
+        axis equal
+        axis off
+    end
+
+
+    set(gcf,'CurrentAxes', ha{2}(1,1))
+    hold on
 
     plot(CursorSpeed_Trial_peakVel(ismember(All_trial_ids_peakVel,curr_trials)&All_initPeak_flag,:,1)', 'Color',  [0.2 0.2 0.2])
 
@@ -275,10 +399,8 @@ annotation('textbox',[0.01 0.94 0.05 0.03], 'String', 'A', 'EdgeColor', 'none', 
 annotation('textbox',[0.26 0.94 0.05 0.03], 'String', 'B', 'EdgeColor', 'none', 'FontSize', 22, 'HorizontalAlignment','center')
 annotation('textbox',[0.70 0.94 0.05 0.03], 'String', 'C', 'EdgeColor', 'none', 'FontSize', 22, 'HorizontalAlignment','center')
 figName = [monkey '_Figure2'];
-% print(figName, '-dtiff')
-% print(figName, '-dpdf', '-painters' )
-
-
+print(figName, '-dtiff')
+print(figName, '-dpdf', '-vector' )
 
 
 

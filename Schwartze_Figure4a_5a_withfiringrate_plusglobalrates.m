@@ -6,14 +6,16 @@ monkey = 'P';
 date_strings = {'20170630', '20170712', '20170703', '20170713', '20170720', '20170731', '20170705', '20170706', '20170714', '20170717', '20170801', '20170802'}; 
 % monkey = 'Q';
 % date_strings = {'20180425', '20180426', '20180509', '20180510', '20180529', '20180530', '20180418', '20180419', '20180503', '20180507', '20180619', '20180620'};
+
 % Regression and data organization
 % run_analysis = true;
- run_analysis = false;
+run_analysis = false;
 
-
+%https://github.com/bastibe/Violinplot-Matlab
+% addpath('Violinplot-Matlab-master')
 
 if run_analysis
-
+parpool(7)
 for d = 1:length(date_strings)
 if monkey == 'P'
     data_location  = 'C:\Users\kevin\Documents\MatLAb\Rouse\COT\monk_p\';
@@ -119,7 +121,7 @@ R2_tot = NaN(1,41,size(SpikeFiringRates_peakVel,3));
 Coefficients = NaN(6,41,size(SpikeFiringRates_peakVel,3));
 p_vals = NaN(6,41,size(SpikeFiringRates_peakVel,3));
 for n = 1:size(SpikeFiringRates_peakVel,3)
-    for t = 1:41
+    parfor t = 1:41
     [R2_partial(:,t,n), R2_tot(:,t,n), Coefficients(:,t,n), p_vals(:,t,n), curr_RMSE(t,n)] = Do_mutiregress(X,SpikeFiringRates_peakVel(:,(20+t),n));
     end
 end
@@ -156,7 +158,7 @@ RMSE_cor{d} = curr_RMSE_cor;
 std_FR_init = NaN(41,size(SpikeFiringRates_peakVel,3));
  std_FR_cor = NaN(41,size(SpikeFiringRates_peakVel,3));
 for n = 1:size(SpikeFiringRates_peakVel,3)
-    for t = 1:41
+    parfor t = 1:41
         std_FR_init(t,n) = std(SpikeFiringRates_peakVel_init(:,(20+t),n));
         std_FR_cor(t,n)  = std(SpikeFiringRates_peakVel_cor(:,(20+t),n));
     end
@@ -341,6 +343,7 @@ xlabel('Angle, degrees')
 set(gca, 'FontSize', 18)
 % print(gcf, 'ExNeuron1', '-dpdf')
 % print(gcf, 'ExNeuron1', '-dtiff')
+% fig2svg('./figure_graphics/figure4a.svg', gcf)
 
 disp(['Preferred Init Dir: ' num2str(pref_dir_init{d}(n))])
 disp(['Preferred Corr Dir: ' num2str(pref_dir_cor{d}(n))])
@@ -372,8 +375,68 @@ xlabel('Angle, degrees')
 set(gca, 'FontSize', 18)
 % print(gcf, 'ExNeuron2', '-dpdf')
 % print(gcf, 'ExNeuron2', '-dtiff')
+% fig2svg('./figure_graphics/figure5a.svg', gcf)
 
 disp(['Init DOM: ' num2str( max(fr_hat_init)-min(fr_hat_init))])
 disp(['Corr DOM: ' num2str(max(fr_hat_cor)-min(fr_hat_cor))])
+
+
+
+
+% Calculating Population Stats for Neurons During Initial Submovements
+All_FR_avg_init = [];
+All_FR_std_init = [];
+
+% Iterate over each matrix in the cell array
+for i = 1:numel(best_SpikeFiringRates_peakVel_init)
+    % Extract the current matrix
+    current_matrix = best_SpikeFiringRates_peakVel_init{i};
+    
+    % Calculate mean and standard deviation for each column of the current matrix
+    mean_current_matrix = mean(current_matrix);
+    std_current_matrix = std(current_matrix);
+    
+    
+    % Store mean and standard deviation in the corresponding row of All_FR_avg_init and All_FR_std_init
+    All_FR_avg_init = [All_FR_avg_init, mean_current_matrix];
+    All_FR_std_init = [All_FR_std_init, std_current_matrix];
+end
+
+All_FR_avg_init_running = cat(2,All_FR_avg_init(:));
+All_FR_std_init_running = cat(2,All_FR_std_init(:));
+
+Avg_Signif_FR_avg_init = mean(All_FR_avg_init(All_signif_units));
+disp(['Avg Global init mean FR for Signif Units: ' num2str(Avg_Signif_FR_avg_init) ''])
+Avg_Signif_FR_std_init = mean(All_FR_std_init(All_signif_units));
+disp(['Avg Global init Std Dev FR for Signif Units: ' num2str(Avg_Signif_FR_std_init) ''])
+
+
+All_FR_avg_cor = [];
+All_FR_std_cor = [];
+
+% Iterate over each matrix in the cell array
+for i = 1:numel(best_SpikeFiringRates_peakVel_cor)
+    % Extract the current matrix
+    current_matrix = best_SpikeFiringRates_peakVel_cor{i};
+    
+    % Calculate mean and standard deviation for each column of the current matrix
+    mean_current_matrix = mean(current_matrix);
+    std_current_matrix = std(current_matrix);
+    
+    
+    % Store mean and standard deviation in the corresponding row of All_FR_avg_cor and All_FR_std_cor
+    All_FR_avg_cor = [All_FR_avg_cor, mean_current_matrix];
+    All_FR_std_cor = [All_FR_std_cor, std_current_matrix];
+end
+
+All_FR_avg_cor_running = cat(2,All_FR_avg_cor(:));
+All_FR_std_cor_running = cat(2,All_FR_std_cor(:));
+
+Avg_Signif_FR_avg_cor = mean(All_FR_avg_cor(All_signif_units));
+disp(['Avg Global corr mean FR for Signif Units: ' num2str(Avg_Signif_FR_avg_cor) ''])
+Avg_Signif_FR_std_cor = mean(All_FR_std_cor(All_signif_units));
+disp(['Avg Global corr Std Dev FR for Signif Units: ' num2str(Avg_Signif_FR_std_cor) ''])
+
+
 
 

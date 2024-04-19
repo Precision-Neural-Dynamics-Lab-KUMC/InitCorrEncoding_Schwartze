@@ -50,4 +50,4 @@ axis equal
 axis off
 end
 end
-
+% fig2svg(['./figure_graphics/figure1b.svg'], gcf)
